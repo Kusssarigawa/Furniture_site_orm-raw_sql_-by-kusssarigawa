@@ -19,7 +19,7 @@ def about(request):
     context = {
         'title': 'Home - О нас',
         'content': "About us ",
-        'text_on_page': "Very cool and cute furniture shop/by something from us!"
+        'text_on_page': "Це мебельний магазин , основної метою якого є полегшення замовлення товарів через web-застосунок "
     }
 
     return render(request, 'main/about.html', context)

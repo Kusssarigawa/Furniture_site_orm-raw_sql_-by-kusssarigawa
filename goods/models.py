@@ -1,3 +1,4 @@
+from functools import cached_property
 from django.db import models
 from django.urls import reverse
 
@@ -38,11 +39,11 @@ class Products(models.Model):
     def get_absolute_url(self):
         return reverse("catalog:product", kwargs={"product_slug": self.slug})
     
-
+    @property
     def display_id(self):
         return f"{self.id:05}"
 
-
+    @property
     def sell_price(self):
         if self.discount:
             return round(self.price - self.price*self.discount/100, 2)

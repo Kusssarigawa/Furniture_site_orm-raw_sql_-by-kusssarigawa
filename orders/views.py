@@ -8,7 +8,10 @@ from carts.models import Cart
 
 from orders.forms import CreateOrderForm
 from orders.models import Order, OrderItem
+from orders.OrdersDao import OrdersDao  # Импорт DAO
+from django.utils import timezone
 
+orders_dao = OrdersDao()  # Создание экземпляра DAO
 
 @login_required
 def create_order(request):
@@ -21,44 +24,43 @@ def create_order(request):
                     cart_items = Cart.objects.filter(user=user)
 
                     if cart_items.exists():
-                        # Создать заказ
-                        order = Order.objects.create(
-                            user=user,
+                        order_id = orders_dao.create_order(
+                            user_id=user.id,
                             phone_number=form.cleaned_data['phone_number'],
-                            requires_delivery=form.cleaned_data['requires_delivery'],
+                            requires_delivery=form.cleaned_data['requires_delivery'] == '1',  # Преобразуем строку в bool
                             delivery_address=form.cleaned_data['delivery_address'],
-                            payment_on_get=form.cleaned_data['payment_on_get'],
+                            payment_on_get=form.cleaned_data['payment_on_get'] == '1',  # Преобразуем строку в bool
                         )
-                        # Создать заказанные товары
-                        for cart_item in cart_items:
-                            product=cart_item.product
-                            name=cart_item.product.name
-                            price=cart_item.product.sell_price()
-                            quantity=cart_item.quantity
 
+                        for cart_item in cart_items:
+                            product = cart_item.product
+                            name = cart_item.product.name
+                            price = cart_item.product.sell_price
+                            quantity = cart_item.quantity
 
                             if product.quantity < quantity:
-                                raise ValidationError(f'Недостаточное количество товара {name} на складе\
-                                                       В наличии - {product.quantity}')
-
-                            OrderItem.objects.create(
-                                order=order,
-                                product=product,
+                                raise ValidationError(f'Недостаточное количество товара {name} на складе. В наличии - {product.quantity}')
+                            created_timestamp = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
+                            orders_dao.create_order_item(
+                                created_timestamp=created_timestamp,
+                                order_id=order_id,
+                                product_id=product.id,
                                 name=name,
                                 price=price,
                                 quantity=quantity,
                             )
+
                             product.quantity -= quantity
                             product.save()
 
-                        # Очистить корзину пользователя после создания заказа
+                        # Очистка корзины пользователя после создания заказа
                         cart_items.delete()
 
                         messages.success(request, 'Заказ оформлен!')
-                        return redirect('user:profile')
+                        # return redirect('user:profile')
             except ValidationError as e:
                 messages.success(request, str(e))
-                return redirect('cart:order')
+                # return redirect('cart:order')
     else:
         initial = {
             'first_name': request.user.first_name,

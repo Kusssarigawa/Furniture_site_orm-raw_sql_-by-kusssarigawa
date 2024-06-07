@@ -25,11 +25,11 @@ class CreateOrderForm(forms.Form):
         data = self.cleaned_data['phone_number']
 
         if not data.isdigit():
-            raise forms.ValidationError("Номер телефона должен содержать только цифры")
+            raise forms.ValidationError("Номер телефона повинен містити цифри")
         
         pattern = re.compile(r'^\d{10}$')
         if not pattern.match(data):
-            raise forms.ValidationError("Неверный формат номера")
+            raise forms.ValidationError("Не коректний формат номеру")
 
         return data
 
