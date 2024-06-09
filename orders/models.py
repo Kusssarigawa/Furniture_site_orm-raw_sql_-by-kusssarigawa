@@ -29,9 +29,11 @@ class Order(models.Model):
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
 
+  
     def __str__(self):
-        return f"Заказ № {self.pk} | Покупатель {self.user.first_name} {self.user.last_name}"
-
+        if self.user:
+            return f"Заказ № {self.pk} | Покупатель {self.user.first_name} {self.user.last_name}"
+        return f"Заказ № {self.pk} | Покупатель не указан"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE, verbose_name="Заказ")
