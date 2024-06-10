@@ -16,11 +16,11 @@
                             <div class="col-md-12 mb-3 text-center">
                                 {% if user.image %}
                                     <img src="{{ user.image.url }}"
-                                        alt="Аватар пользователя" class="img-fluid rounded-circle"
+                                        alt="Аватар користувача" class="img-fluid rounded-circle"
                                         style="max-width: 150px;">
                                 {% else %}
                                     <img src="{% static "deps/images/baseavatar.jpg" %}"
-                                        alt="Аватар пользователя" class="img-fluid rounded-circle"
+                                        alt="Аватар користувача" class="img-fluid rounded-circle"
                                         style="max-width: 150px;">
                                 {% endif %}
                                 <input type="file" class="form-control mt-3" id="id_image"
@@ -34,7 +34,7 @@
                                 <label for="id_first_name" class="form-label">Им'я*</label>
                                 <input type="text" class="form-control" id="id_first_name"
                                     name="first_name"
-                                    placeholder="Введите ваше имя"
+                                    placeholder="Введіть ваше ім'я"
                                     value="{{ form.first_name.value }}"
                                     required>
                                     {% if form.first_name.errors %}
@@ -45,7 +45,7 @@
                                 <label for="id_last_name" class="form-label">Фамілія*</label>
                                 <input type="text" class="form-control" id="id_last_name"
                                     name="last_name"
-                                    placeholder="Введите вашу фамилию"
+                                    placeholder="Введіть ваше прізвище"
                                     value="{{ form.last_name.value }}"
                                     required>
                                     {% if form.last_name.errors %}
@@ -56,7 +56,7 @@
                                 <label for="id_username" class="form-label">Им'я користувача*</label>
                                 <input type="text" class="form-control" id="id_username"
                                     name="username"
-                                    placeholder="Введите ваше имя пользователя"
+                                    placeholder="Введіть ваше им'я користувача"
                                     value="{{ form.username.value }}"
                                     required>
                                     {% if form.username.errors %}
@@ -67,7 +67,7 @@
                                 <label for="id_email" class="form-label">Email*</label>
                                 <input type="email" class="form-control" id="id_email"
                                     name="email"
-                                    placeholder="Введите ваш email *youremail@example.com"
+                                    placeholder="Введіть ваш email *youremail@example.com"
                                     value="{{ form.email.value }}"
                                     required>
                                     {% if form.email.errors %}
